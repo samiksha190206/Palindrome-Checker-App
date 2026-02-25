@@ -1,7 +1,12 @@
 public class PalindromeChecker {
     public static void main(String[] args) {
-        System.out.println("Welcome to palindrome Checker App");
-        System.out.println("Version :1.0");
-        System.out.println("System initialized successfully");
-    }
-}
+                String word = "madam";
+                String reversed = "";
+                for (int i = word.length() - 1; i >= 0; i--) {
+                    reversed += word.charAt(i);
+                }
+                boolean isPalindrome = word.equals(reversed);
+                System.out.println("Input text : " + word);
+                System.out.println("Is it a palindrome? " + isPalindrome);
+            }
+        }
