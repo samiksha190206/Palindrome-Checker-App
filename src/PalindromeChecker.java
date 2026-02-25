@@ -1,7 +1,7 @@
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Stack;
-public class PalindromeChecker {
+ public class PalindromeChecker {
     public static void main(String[] args) {
         String input = "civic";
         Queue<Character> queue = new LinkedList<>();
