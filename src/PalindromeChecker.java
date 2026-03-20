@@ -1,40 +1,40 @@
 import java.util.*;
 
-// Step 1: Strategy Interface
-interface PalindromeStrategy {
-    boolean checkPalindrome(String input);
-}
+public class PalindromeChecker {
 
-// Step 2: Stack आधारित strategy
-class StackStrategy implements PalindromeStrategy {
+    // 🔹 Method 1: Simple Two-Pointer
+    public static boolean simpleCheck(String input) {
+        int start = 0;
+        int end = input.length() - 1;
 
-    public boolean checkPalindrome(String input) {
-        input = input.replaceAll("\\s+", "").toLowerCase();
+        while (start < end) {
+            if (input.charAt(start) != input.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
 
+    // 🔹 Method 2: Stack
+    public static boolean stackCheck(String input) {
         Stack<Character> stack = new Stack<>();
 
-        // Push all characters
         for (char ch : input.toCharArray()) {
             stack.push(ch);
         }
 
-        // Compare while popping
         for (char ch : input.toCharArray()) {
             if (ch != stack.pop()) {
                 return false;
             }
         }
-
         return true;
     }
-}
 
-// Step 3: Deque आधारित strategy
-class DequeStrategy implements PalindromeStrategy {
-
-    public boolean checkPalindrome(String input) {
-        input = input.replaceAll("\\s+", "").toLowerCase();
-
+    // 🔹 Method 3: Deque
+    public static boolean dequeCheck(String input) {
         Deque<Character> deque = new LinkedList<>();
 
         for (char ch : input.toCharArray()) {
@@ -46,58 +46,43 @@ class DequeStrategy implements PalindromeStrategy {
                 return false;
             }
         }
-
         return true;
     }
-}
-
-// Step 4: Context class
-class PalindromeContext {
-    private PalindromeStrategy strategy;
-
-    public void setStrategy(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean execute(String input) {
-        return strategy.checkPalindrome(input);
-    }
-}
-
-// Step 5: Main class
-public class PalindromeChecker {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        PalindromeContext context = new PalindromeContext();
 
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        System.out.println("Choose Strategy:");
-        System.out.println("1. Stack Strategy");
-        System.out.println("2. Deque Strategy");
+        // Normalize input
+        input = input.replaceAll("\\s+", "").toLowerCase();
 
-        int choice = scanner.nextInt();
+        // 🔹 Measure Simple Method
+        long start1 = System.nanoTime();
+        boolean result1 = simpleCheck(input);
+        long end1 = System.nanoTime();
 
-        // Inject strategy at runtime
-        if (choice == 1) {
-            context.setStrategy(new StackStrategy());
-        } else if (choice == 2) {
-            context.setStrategy(new DequeStrategy());
-        } else {
-            System.out.println("Invalid choice!");
-            scanner.close();
-            return;
-        }
+        // 🔹 Measure Stack Method
+        long start2 = System.nanoTime();
+        boolean result2 = stackCheck(input);
+        long end2 = System.nanoTime();
 
-        boolean result = context.execute(input);
+        // 🔹 Measure Deque Method
+        long start3 = System.nanoTime();
+        boolean result3 = dequeCheck(input);
+        long end3 = System.nanoTime();
 
-        if (result) {
-            System.out.println("The given string is a Palindrome.");
-        } else {
-            System.out.println("The given string is NOT a Palindrome.");
-        }
+        // 🔹 Display Results
+        System.out.println("\n--- Results ---");
+        System.out.println("Simple Method: " + (result1 ? "Palindrome" : "Not Palindrome")
+                + " | Time: " + (end1 - start1) + " ns");
+
+        System.out.println("Stack Method: " + (result2 ? "Palindrome" : "Not Palindrome")
+                + " | Time: " + (end2 - start2) + " ns");
+
+        System.out.println("Deque Method: " + (result3 ? "Palindrome" : "Not Palindrome")
+                + " | Time: " + (end3 - start3) + " ns");
 
         scanner.close();
     }
